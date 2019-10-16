@@ -25,29 +25,33 @@ class Camera:
 		init_t = rospy.get_time()
 		rate = rospy.Rate(10)
 			
-		desired = 320 
+		desired = 350 
 		#k_p = 0.0029		
 		#k_i = 0.0085
-		k_p = 0.0055		
+		k_p = 0.0058		
 		#k_i = 0.0006		
-		k_i = 0.0015		
+		#k_i = 0.00185				
+		k_i = 0.00196		
 		#k_i = 0.00095
 		integral = 0
 		derivative = 0
 		lasterror = 0
-		#k_d = 0.0007
-		k_d = 0.00095
-		while rospy.get_time()-init_t < (27):
+		#k_d = 0.0007		
+		#k_d = 0.00095
+		
+		#k_d = 0.00098
+		k_d = 0.00105
+		while rospy.get_time()-init_t < (16):
 			actual = int(self.data)
 			print actual
 			error = desired - actual 
-			if ((integral+error) < 100 ) and ((integral+error) > -100):
+			if ((integral) < 100 ) and ((integral) > -100):
 				integral = integral + error 
 
 			print integral
 			derivative = error - lasterror
 			correction = k_p*error + k_i*integral+ k_d*derivative
-			twist.linear.x = 0.1
+			twist.linear.x = 0.08
 			#print correction
 			twist.angular.z = correction
 			cmd_pub.publish(twist)
@@ -59,7 +63,7 @@ class Camera:
 		rospy.loginfo(twist.linear.x)
 		rospy.loginfo(twist.angular.z)
 
-		print "HELLO"
+		#print "HELLO"
 		cmd_pub.publish(twist)
 		pass
 
